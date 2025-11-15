@@ -1,0 +1,18 @@
+doctor - 
+so doctor can login or create profile
+on create profile it asks for doctor credentials
+on login there will be 3 option
+my appointments
+my profile 
+availability 
+my appointments will show the appointments that the user has created
+profile will show doctor profile 
+availability will help him create time from which to which he is available for appointment 
+
+
+user - 
+1 book appointments option where the list of available doctor will show from backend where the user can book the appointments
+ 2.then a option for my appointments where my booked appointments will show along with the date
+3.when click on community then it will route to different page where you have u complete your profile 
+then it will ask for user name user address user email and a file/doc to upload to confirm it is female then when authentication done then it will route to community page
+3.
