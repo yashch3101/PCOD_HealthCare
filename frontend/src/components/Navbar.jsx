@@ -26,6 +26,7 @@ export default function Navbar() {
 
   const handleNavigation = (path) => {
     navigate(path);
+    setIsOpen(false); // close mobile menu
   };
 
   return (
@@ -62,10 +63,10 @@ export default function Navbar() {
             >
               <div
                 className="font-bold text-lg cursor-pointer hover:text-pink-400 transition duration-300 transform hover:scale-110"
-                onClick={() => handleNavigation("")}
               >
                 Health
               </div>
+
               {isHealthOpen && (
                 <div
                   className="absolute top-full left-0 mt-2 bg-white text-purple-800 shadow-md rounded-lg p-4 w-96 grid grid-cols-2 gap-4"
@@ -93,6 +94,7 @@ export default function Navbar() {
               )}
             </div>
 
+            {/* Other Desktop Links */}
             {[
               { name: "Community", path: "/community" },
               { name: "Cycle Tracker", path: "/tracker" },
@@ -108,13 +110,73 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Connect Wallet Button */}
+          {/* Desktop Wallet Button */}
           <div className="hidden lg:flex">
             <WalletConnect />
           </div>
         </nav>
       </div>
-      {/* Spacer to offset fixed navbar height */}
+
+      {/* ******** MOBILE MENU ******** */}
+      {isOpen && (
+        <div className="lg:hidden bg-white text-purple-800 shadow-md px-6 py-4 space-y-4 mt-[80px] w-full fixed z-40">
+          {/* Health Dropdown (Mobile) */}
+          <div>
+            <div
+              className="font-bold text-lg cursor-pointer flex justify-between items-center"
+              onClick={() => setIsHealthOpen(!isHealthOpen)}
+            >
+              Health
+              <span>{isHealthOpen ? "▲" : "▼"}</span>
+            </div>
+
+            {isHealthOpen && (
+              <div className="mt-2 grid grid-cols-1 gap-3">
+                {[
+                  { name: "PCOD/PCOS", path: "/pcod-pcos" },
+                  { name: "Pregnancy Care", path: "/pregnancy" },
+                  { name: "Menopause", path: "/menopause" },
+                  { name: "Mental Well-being", path: "/health/mental" },
+                  { name: "Nutrition & Diet", path: "/health/nutrition" },
+                  { name: "Fitness & Exercise", path: "/health/fitness" },
+                  { name: "Skin & Hair Care", path: "/hairandskincare" },
+                  { name: "Women's Hygiene", path: "/health/hygiene" },
+                ].map(({ name, path }) => (
+                  <div
+                    key={name}
+                    className="px-4 py-2 bg-gray-100 hover:bg-purple-200 rounded cursor-pointer"
+                    onClick={() => handleNavigation(path)}
+                  >
+                    {name}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Other Links (Mobile) */}
+          {[
+            { name: "Community", path: "/community" },
+            { name: "Cycle Tracker", path: "/tracker" },
+            { name: "Dashboard", path: "/dashboard" },
+          ].map(({ name, path }) => (
+            <div
+              key={name}
+              className="font-bold text-lg cursor-pointer"
+              onClick={() => handleNavigation(path)}
+            >
+              {name}
+            </div>
+          ))}
+
+          {/* Wallet Button Mobile */}
+          <div>
+            <WalletConnect />
+          </div>
+        </div>
+      )}
+
+      {/* Spacer for fixed navbar */}
       <div className="h-[80px]" />
     </>
   );
