@@ -14,9 +14,9 @@ import Checkup from "./pages/Checkup";
 import FaceScan from "./pages/FaceScan";
 
 import HairSkinCarePage from "./pages/HairSkinCarePage/HairSkinCarePage";
-import Doctor from "./pages/Doctor/Doctor";
-import Login from "./pages/Doctor/Login";
-import CreateProfile from "./pages/Doctor/CreateProfile";
+import Doctor from "./pages/doctor/Doctor";
+import Login from "./pages/doctor/Login";
+import CreateProfile from "./pages/doctor/CreateProfile";
 import { ToastContainer } from "react-toastify";
 
 const App = () => {
