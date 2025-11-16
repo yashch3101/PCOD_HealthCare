@@ -6,7 +6,8 @@ import requests
 import os
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 model = joblib.load("pcos_model_pipeline.pkl")
 
@@ -19,17 +20,24 @@ new_features = [
 API_KEY = os.environ.get("PCOD_API_KEY", "health-checker")
 GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "")
 
-@app.route('/')
+
+@app.route("/")
 def home():
     return "PCOS/PCOD Prediction API running successfully"
 
+
 @app.route('/predict', methods=['POST', 'OPTIONS'])
 def predict():
+
     if request.method == 'OPTIONS':
-        return '', 204
+        response = jsonify({"message": "OK"})
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add("Access-Control-Allow-Headers", "*")
+        response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+        return response, 204
 
     try:
-        req_key = request.headers.get('x-api-key')
+        req_key = request.headers.get("x-api-key")
         if req_key != API_KEY:
             return jsonify({"error": "Unauthorized - Invalid API Key"}), 401
 
@@ -39,17 +47,27 @@ def predict():
 
         prediction = model.predict(input_df)[0]
 
-        return jsonify({
+        response = jsonify({
             "prediction": int(prediction),
             "message": "PCOS/PCOD Positive" if prediction == 1 else "PCOS/PCOD Negative"
         })
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        return response
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 
-@app.route('/chat', methods=['POST'])
+@app.route('/chat', methods=['POST', 'OPTIONS'])
 def chat():
+
+    if request.method == 'OPTIONS':
+        response = jsonify({"message": "OK"})
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add("Access-Control-Allow-Headers", "*")
+        response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+        return response, 204
+
     try:
         data = request.get_json()
         user_input = data.get("message", "").strip()
@@ -80,7 +98,9 @@ def chat():
                 .get("text", "")
         )
 
-        return jsonify({"reply": reply})
+        final = jsonify({"reply": reply})
+        final.headers.add("Access-Control-Allow-Origin", "*")
+        return final
 
     except Exception as e:
         return jsonify({"reply": f"Server error: {str(e)}"}), 500
